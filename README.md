@@ -5,6 +5,32 @@ O projeto foi construído seguindo os princípios da **Clean Architecture**, usa
 
 ---
 
+## ⚙️ Como rodar o projeto localmente
+
+### Pré-requisitos
+
+- [.NET 9 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/9.0)
+- [MySQL Server](https://dev.mysql.com/downloads/mysql/)
+
+### Passo a passo
+
+1. **Clone o repositório**
+   ```bash
+   git clone https://github.com/paccolajoao/api-medical-office.git
+   cd seu-repo
+2. **Crie o banco de dados**
+   ```CREATE DATABASE medical_office;
+3. **Configure a string de conexão**
+	```Edite o arquivo appsettings.json e ajuste:
+	"ConnectionStrings": {
+	  "DefaultConnection": "server=localhost;port=3306;database=medical_office;user=seu_usuario;password=sua_senha"
+	}
+4. **Aplique as migrations e execute**
+	```dotnet ef database update
+	dotnet run
+
+---
+
 ## 🧱 Arquitetura
 
 O projeto utiliza **Clean Architecture**, separando as responsabilidades em diferentes camadas:
