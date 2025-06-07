@@ -1,6 +1,8 @@
+using ApiMedicalOffice.Application.Interfaces;
+using ApiMedicalOffice.Application.Services;
+using ApiMedicalOffice.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using ApiMedicalOffice.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +22,8 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+
+builder.Services.AddScoped<IPacienteService, PacienteService>();
 
 var app = builder.Build();
 
