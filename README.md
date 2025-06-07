@@ -4,7 +4,6 @@ API RESTful desenvolvida em **.NET 9** com **Entity Framework Core** e **MySQL**
 O projeto foi construído seguindo os princípios da **Clean Architecture**, usando boas práticas, DTOs e validações robustas.
 
 ---
-
 ## ⚙️ Como rodar o projeto localmente
 
 ### Pré-requisitos
@@ -19,16 +18,21 @@ O projeto foi construído seguindo os princípios da **Clean Architecture**, usa
    git clone https://github.com/paccolajoao/api-medical-office.git
    cd seu-repo
 2. **Crie o banco de dados**
-   ```CREATE DATABASE medical_office;
-3. **Configure a string de conexão**
-	```Edite o arquivo appsettings.json e ajuste:
-	"ConnectionStrings": {
+   ```
+   CREATE DATABASE medical_office;
+3. **Configure o arquivo appsettings.json e ajuste**
+	```
+    "ConnectionStrings": {
 	  "DefaultConnection": "server=localhost;port=3306;database=medical_office;user=seu_usuario;password=sua_senha"
 	}
 4. **Aplique as migrations e execute**
-	```dotnet ef database update
+	```
+    dotnet ef database update
 	dotnet run
 
+5. **Documentação Swagger**
+    ```
+    http://localhost:{porta}/swagger
 ---
 
 ## 🧱 Arquitetura
@@ -43,7 +47,6 @@ O projeto utiliza **Clean Architecture**, separando as responsabilidades em dife
 **Vantagem:** fácil manutenção, testes, evolução do sistema e possibilidade de trocar banco/framework sem mexer nas regras de negócio.
 
 ---
-
 ## 🗃️ Entidade: Paciente
 
 A tabela de pacientes contém os seguintes campos:
@@ -63,7 +66,6 @@ A tabela de pacientes contém os seguintes campos:
 > Os campos obrigatórios são validados tanto na API (DTOs) quanto no banco.
 
 ---
-
 ## 📦 Funcionalidades atuais
 
 - Criar paciente (POST)
@@ -76,7 +78,6 @@ A tabela de pacientes contém os seguintes campos:
 - Documentação interativa via Swagger
 
 ---
-
 ## 💾 Exemplo de requisição JSON para criar paciente
 
 ```json
