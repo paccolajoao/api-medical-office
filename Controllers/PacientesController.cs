@@ -1,58 +1,66 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using ApiMedicalOffice.Application.Dtos;
+﻿using ApiMedicalOffice.Application.Dtos;
 using ApiMedicalOffice.Application.Interfaces;
-
-namespace ApiMedicalOffice.Controllers;
+using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
 [Route("api/[controller]")]
 public class PacientesController : ControllerBase
 {
     private readonly IPacienteService _service;
-
-    public PacientesController(IPacienteService service)
-    {
-        _service = service;
-    }
+    public PacientesController(IPacienteService service) => _service = service;
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<PacienteResponseDto>>> Listar()
+    public async Task<ActionResult<PaginatedResponse<PacienteResponseDto>>> Listar(
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 10)
     {
-        var lista = await _service.ListarAsync();
-        return Ok(lista);
+        var paginado = await _service.ListarAsync(pageNumber, pageSize);
+        return Ok(paginado);
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<PacienteResponseDto>> ObterPorId(int id)
+    public async Task<ActionResult<PaginatedResponse<PacienteResponseDto>>> ObterPorId(int id)
     {
-        var paciente = await _service.ObterPorIdAsync(id);
-        if (paciente == null) return NotFound();
-        return Ok(paciente);
+        var paged = await _service.ObterPorIdAsync(id);
+        if (paged == null || !paged.Data.Any())
+            return NotFound();
+        return Ok(paged);
     }
 
     [HttpPost]
-    public async Task<ActionResult<PacienteResponseDto>> Criar(PacienteCreateDto dto)
+    public async Task<ActionResult<PaginatedResponse<PacienteResponseDto>>> Criar(PacienteCreateDto dto)
     {
-        var criado = await _service.CriarAsync(dto);
-        return CreatedAtAction(nameof(ObterPorId), new { id = criado.Id }, criado);
+        var paged = await _service.CriarAsync(dto);
+
+        // Extrai o Id do primeiro item em Data
+        var newId = paged.Data.First().Id;
+
+        return CreatedAtAction(
+            nameof(ObterPorId),
+            new { id = newId },
+            paged
+        );
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<PacienteResponseDto>> Atualizar(int id, PacienteUpdateDto dto)
+    public async Task<ActionResult<PaginatedResponse<PacienteResponseDto>>> Atualizar(int id, PacienteUpdateDto dto)
     {
-        var atualizado = await _service.AtualizarAsync(id, dto);
-        if (atualizado == null)
+        var paged = await _service.AtualizarAsync(id, dto);
+        if (paged == null || !paged.Data.Any())
             return NotFound();
 
-        return Ok(atualizado);
+        var updatedId = paged.Data.First().Id;
+        return CreatedAtAction(
+            nameof(ObterPorId),
+            new { id = updatedId },
+            paged
+        );
     }
-
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Remover(int id)
     {
-        var removido = await _service.RemoverAsync(id);
-        if (!removido) return NotFound();
-        return NoContent();
+        var ok = await _service.RemoverAsync(id);
+        return ok ? NoContent() : NotFound();
     }
 }

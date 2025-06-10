@@ -68,13 +68,15 @@ A tabela de pacientes contém os seguintes campos:
 ---
 ## 📦 Funcionalidades atuais
 
-- Criar paciente (POST)
-- Buscar todos pacientes (GET)
-- Buscar paciente por ID (GET)
-- Atualizar paciente (PUT)
-- Deletar paciente (DELETE)
-- Validação automática dos campos obrigatórios e tamanho máximo
-- Datas no fuso de São Paulo ("America/Sao_Paulo")
+- CRUD de pacientes:
+	- POST /api/pacientes
+	- GET /api/pacientes?pageNumber={n}&pageSize={m} (listagem paginada)
+	- GET /api/pacientes/{id}
+	- PUT /api/pacientes/{id}
+	- DELETE /api/pacientes/{id}
+- Paginação de resultados com parâmetros pageNumber e pageSize
+- Validações de campos obrigatórios e tamanho máximo ([Required], [MaxLength])
+- Timezone “America/Sao_Paulo” na gravação de datas
 - Documentação interativa via Swagger
 
 ---
